@@ -6,7 +6,7 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "AIController.h"
 //#include "Public/CPatrollingGuard.h" // TODO remove coupling, add ActorComponent patrolPoints
-#include "Public/PatrolRoute.h"
+#include "Public/NPC/PatrolRoute.h"
 #include "CChooseNextWayPoint.generated.h"
 
 

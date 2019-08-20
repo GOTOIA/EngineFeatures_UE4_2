@@ -42,7 +42,7 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	FP_Gun->SetOnlyOwnerSee(true);			// Only the owning player will see this mesh
 	FP_Gun->bCastDynamicShadow = false;		// Disallow mesh to cast dynamic shadows
 	FP_Gun->CastShadow = false;			// Disallow mesh to cast other shadows
-	FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
+	//FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint_1"));
 
 	// Set weapon damage and range
 	WeaponRange = 5000.0f;
@@ -260,4 +260,10 @@ void AFP_FirstPersonCharacter::TryEnableTouchscreenMovement(UInputComponent* Pla
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFP_FirstPersonCharacter::BeginTouch);
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Released, this, &AFP_FirstPersonCharacter::EndTouch);
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AFP_FirstPersonCharacter::TouchUpdate);	
+}
+
+void AFP_FirstPersonCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
 }
