@@ -5,6 +5,8 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/SkeletalMeshComponent.h"
+
 
 
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
@@ -195,5 +197,12 @@ void AFP_FirstPersonCharacter::TryEnableTouchscreenMovement(UInputComponent* Pla
 void AFP_FirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
+
+	if (GunBluePrint == NULL) {
+
+		UE_LOG(LogTemp, Warning, TEXT("Gun Blueprint missing"));
+		return;
+	}
+	Gun = GetWorld()->SpawnActor<ACGUN>(GunBluePrint);
+	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
 }

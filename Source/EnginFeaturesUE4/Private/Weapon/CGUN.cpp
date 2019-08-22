@@ -15,7 +15,8 @@ ACGUN::ACGUN()
 
 	// Create a gun mesh component
 	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// Only the owning player will see this mesh
+	//A Supprimer pour que la mesh soit visible en jeu
+	//FP_Gun->SetOnlyOwnerSee(true);			// Only the owning player will see this mesh
 	FP_Gun->bCastDynamicShadow = false;		// Disallow mesh to cast dynamic shadows
 	FP_Gun->CastShadow = false;			// Disallow mesh to cast other shadows
 	//FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint_1"));

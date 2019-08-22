@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Weapon/CGUN.h"
 #include "FP_FirstPersonCharacter.generated.h"
 
 class UInputComponent;
 class UCameraComponent;
 class USkeletalMeshComponent;
-class USoundBase;
-class UAnimMontage;
+
+
 
 UCLASS(config=Game)
 class AFP_FirstPersonCharacter : public ACharacter
@@ -19,8 +20,7 @@ class AFP_FirstPersonCharacter : public ACharacter
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		USkeletalMeshComponent* Mesh1P;
-
+	USkeletalMeshComponent* Mesh1P;
 
 
 	/** First person camera */
@@ -28,7 +28,7 @@ class AFP_FirstPersonCharacter : public ACharacter
 	UCameraComponent* FirstPersonCameraComponent;
 
 	
-	
+	ACGUN * Gun;
 
 public:
 	AFP_FirstPersonCharacter();
@@ -45,7 +45,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector GunOffset;
 
-
+	UPROPERTY(EditDefaultsOnly, Category = setup)
+		TSubclassOf<ACGUN> GunBluePrint;
 	
 	
 protected:
