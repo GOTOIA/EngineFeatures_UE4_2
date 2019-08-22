@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
+#include "Weapon/CWeaponProjectile.h"
 
 #define COLLISION_WEAPON		ECC_GameTraceChannel1
 
@@ -43,6 +44,10 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	FP_Gun->bCastDynamicShadow = false;		// Disallow mesh to cast dynamic shadows
 	FP_Gun->CastShadow = false;			// Disallow mesh to cast other shadows
 	//FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint_1"));
+
+	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
+	FP_MuzzleLocation->SetupAttachment(FP_Gun);
+	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	// Set weapon damage and range
 	WeaponRange = 5000.0f;
@@ -90,6 +95,21 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 
 void AFP_FirstPersonCharacter::OnFire()
 {
+
+	// try and fire a projectile
+	if (ProjectileClass != NULL)
+	{
+		const FRotator SpawnRotation = GetControlRotation();
+		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+		const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+
+		UWorld* const World = GetWorld();
+		if (World != NULL)
+		{
+			// spawn the projectile at the muzzle
+			World->SpawnActor<ACWeaponProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+		}
+	}
 	// Play a sound if there is one
 	if (FireSound != NULL)
 	{
@@ -108,7 +128,7 @@ void AFP_FirstPersonCharacter::OnFire()
 	}
 
 	// Now send a trace from the end of our gun to see if we should hit anything
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	/*APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	
 	FVector ShootDir = FVector::ZeroVector;
 	FVector StartTrace = FVector::ZeroVector;
@@ -138,7 +158,7 @@ void AFP_FirstPersonCharacter::OnFire()
 	if ((DamagedActor != NULL) && (DamagedActor != this) && (DamagedComponent != NULL) && DamagedComponent->IsSimulatingPhysics())
 	{
 		DamagedComponent->AddImpulseAtLocation(ShootDir * WeaponDamage, Impact.Location);
-	}
+	}*/
 }
 
 
