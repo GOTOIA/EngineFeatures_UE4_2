@@ -30,6 +30,9 @@ class AFP_FirstPersonCharacter : public ACharacter
 	
 	ACGUN * Gun;
 
+	UInputComponent* PlayerInput;
+	
+
 public:
 	AFP_FirstPersonCharacter();
 
@@ -47,6 +50,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = setup)
 		TSubclassOf<ACGUN> GunBluePrint;
+
+	
 	
 	
 protected:
@@ -142,6 +147,8 @@ public:
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+
 
 };
 

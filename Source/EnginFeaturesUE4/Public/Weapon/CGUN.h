@@ -57,8 +57,6 @@ public:
 	//	float WeaponDamage;
 
 
-protected :
-
 	/** Fires a virtual projectile. */
 	//UFUNCTION(BlueprintCallable, Category = "Action")
 	void OnFire();

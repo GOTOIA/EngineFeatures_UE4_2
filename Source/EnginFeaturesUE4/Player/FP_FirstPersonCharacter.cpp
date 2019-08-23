@@ -49,6 +49,27 @@ AFP_FirstPersonCharacter::AFP_FirstPersonCharacter()
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+
+void AFP_FirstPersonCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (GunBluePrint == NULL) {
+
+		UE_LOG(LogTemp, Warning, TEXT("Gun Blueprint missing"));
+		return;
+	}
+	Gun = GetWorld()->SpawnActor<ACGUN>(GunBluePrint);
+	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
+	Gun->AnimInstance = Mesh1P->GetAnimInstance();
+	// Bind fire event
+	if (PlayerInput != NULL) {
+		PlayerInput->BindAction("Fire", IE_Pressed, Gun, &ACGUN::OnFire);
+
+	}
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -56,6 +77,8 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 {
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
+
+	PlayerInput = PlayerInputComponent;
 	
 	// Set up gameplay key bindings
 
@@ -63,8 +86,6 @@ void AFP_FirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	
-	// Bind fire event
-	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AFP_FirstPersonCharacter::OnFire);
 	
 	// Attempt to enable touch screen movement
 	TryEnableTouchscreenMovement(PlayerInputComponent);
@@ -91,6 +112,7 @@ void AFP_FirstPersonCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, c
 	{
 		if( TouchItem.FingerIndex != FingerIndex)
 		{
+			Gun->OnFire();
 			//OnFire();			
 		}
 	}
@@ -116,6 +138,7 @@ void AFP_FirstPersonCharacter::EndTouch(const ETouchIndex::Type FingerIndex, con
 	if ((FingerIndex == TouchItem.FingerIndex) && (TouchItem.bMoved == false))
 	{
 		//OnFire();
+		Gun->OnFire();
 	}
 
 	// Flag we are no longer processing the touch event
@@ -194,15 +217,4 @@ void AFP_FirstPersonCharacter::TryEnableTouchscreenMovement(UInputComponent* Pla
 	PlayerInputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AFP_FirstPersonCharacter::TouchUpdate);	
 }
 
-void AFP_FirstPersonCharacter::BeginPlay()
-{
-	Super::BeginPlay();
 
-	if (GunBluePrint == NULL) {
-
-		UE_LOG(LogTemp, Warning, TEXT("Gun Blueprint missing"));
-		return;
-	}
-	Gun = GetWorld()->SpawnActor<ACGUN>(GunBluePrint);
-	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
-}
