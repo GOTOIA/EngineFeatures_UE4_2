@@ -58,8 +58,8 @@ public:
 
 
 	/** Fires a virtual projectile. */
-	UFUNCTION(BlueprintCallable, Category = "Action")
-	void OnFire();
+		UFUNCTION(BlueprintCallable, Category = "Action")
+	void OnFire();	
 
 	//FHitResult WeaponTrace(const FVector& StartTrace, const FVector& EndTrace) const;
 
