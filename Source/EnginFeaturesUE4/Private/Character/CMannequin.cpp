@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/InputComponent.h"
 #include "CGUN.h"
 
 
@@ -46,6 +47,10 @@ void ACMannequin::BeginPlay()
 	Gun = GetWorld()->SpawnActor<ACGUN>(GunBlueprint);
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1")); //Attach gun mesh component to Skeleton, doing it here because the skelton is not yet created in the constructor
 	Gun->AnimInstance = Mesh1P->GetAnimInstance();
+
+	if (InputComponent != NULL) {
+		InputComponent->BindAction("Fire", IE_Pressed, this, &ACMannequin::PullTrigger);
+	}
 	
 }
 
@@ -61,9 +66,12 @@ void ACMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+
+	
+
 }
 
-void ACMannequin::Fire()
+void ACMannequin::PullTrigger()
 {
 	Gun->OnFire();
 }
