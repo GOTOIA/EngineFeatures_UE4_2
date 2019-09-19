@@ -69,14 +69,18 @@ void ACGUN::OnFire()
 		}
 
 		// Try and play a firing animation if specified
-		if (FireAnimation != NULL)
+		if (FireAnimation1P != NULL && AnimInstance1P!=NULL)
 		{
 			// Get the animation object for the arms mesh
+			AnimInstance1P->Montage_Play(FireAnimation1P, 1.f);
 			
-			if (AnimInstance != NULL)
-			{
-				AnimInstance->Montage_Play(FireAnimation, 1.f);
-			}
+		}
+
+		// Try and play a firing animation if specified
+		if (FireAnimation3P != NULL && AnimInstance3P != NULL)
+		{
+			// Get the animation object for the arms mesh
+			AnimInstance3P->Montage_Play(FireAnimation3P, 1.f);
 		}
 
 		// Now send a trace from the end of our gun to see if we should hit anything

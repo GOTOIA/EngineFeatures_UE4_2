@@ -61,7 +61,7 @@ void AFP_FirstPersonCharacter::BeginPlay()
 	}
 	Gun = GetWorld()->SpawnActor<ACGUN>(GunBluePrint);
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint_1"));
-	Gun->AnimInstance = Mesh1P->GetAnimInstance();
+	Gun->AnimInstance1P = Mesh1P->GetAnimInstance();
 	// Bind fire event
 	if (PlayerInput != NULL) {
 		PlayerInput->BindAction("Fire", IE_Pressed, Gun, &ACGUN::OnFire);
