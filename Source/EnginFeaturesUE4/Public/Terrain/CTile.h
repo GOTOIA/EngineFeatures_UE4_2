@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameFramework/Actor.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CTile.generated.h"
@@ -14,7 +15,7 @@ class ENGINFEATURESUE4_API ACTile : public AActor
 private :
 	
 	UFUNCTION(BlueprintCallable, Category = "Component")
-		void PlaceActors();
+		void PlaceActors(TSubclassOf<AActor>ToSpawn, int minSpawn, int maxSpawn);
 
 	
 public:	

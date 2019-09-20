@@ -3,6 +3,8 @@
 
 #include "CTile.h"
 
+
+
 // Sets default values
 ACTile::ACTile()
 {
@@ -26,16 +28,22 @@ void ACTile::Tick(float DeltaTime)
 }
 
 
-void ACTile::PlaceActors() {
+void ACTile::PlaceActors(TSubclassOf<AActor>ToSpawn,int minSpawn, int maxSpawn) {
 
-	FVector Min(0, -2000, 0);
-	FVector Max(4000, 2000, 0);
-	FBox Bounds(Min, Max);
+
+	//TODO Resize scene
+	FVector min(0, -2000, 0);
+	FVector max(4000, 2000, 0);
+	FBox bounds(min, max);
+	
+	int numberToSpawn = FMath::RandRange(minSpawn, maxSpawn);
 	//Generating random number
-	for (size_t i = 0; i < 20; i++)
+	for (size_t i = 0; i < numberToSpawn; i++)
 	{
-		FVector SpawnPoint = FMath::RandPointInBox(Bounds);
-		UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToCompactString())
+		FVector spawnPoint = FMath::RandPointInBox(bounds);
+		AActor *spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
+		spawned->SetActorRelativeLocation(spawnPoint);
+		spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 
 }
