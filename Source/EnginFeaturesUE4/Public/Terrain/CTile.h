@@ -4,7 +4,6 @@
 
 #include "GameFramework/Actor.h"
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "CTile.generated.h"
 
 UCLASS()
@@ -17,6 +16,7 @@ private :
 	UFUNCTION(BlueprintCallable, Category = "Component")
 		void PlaceActors(TSubclassOf<AActor>ToSpawn, int minSpawn, int maxSpawn);
 
+	bool CastSphere(FVector Location, float Radius);
 	
 public:	
 	// Sets default values for this actor's properties
