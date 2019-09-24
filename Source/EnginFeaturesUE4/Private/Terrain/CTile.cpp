@@ -5,6 +5,38 @@
 #include "DrawDebugHelpers.h"
 
 
+//Sub find a good location (empty)
+bool ACTile::FindEmptyLocation(FVector & OutLocation, float Radius)
+{
+	FVector Min(0, -2000, 0);
+	FVector Max(4000, 2000, 0);
+	FBox Bounds(Min, Max);
+	
+	const int MAX_ATTEMPTS = 100;
+	for (size_t i = 0; i < MAX_ATTEMPTS; i++)
+	{
+		
+		FVector CandidatePoint = FMath::RandPointInBox(Bounds);
+		if (CanSpawnAtLocation(CandidatePoint, Radius)) {
+			OutLocation = CandidatePoint;
+			return true;
+		}
+	}
+	return false;
+}
+
+
+//Sub PlaceActore blueprintable
+void ACTile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
+{
+	AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
+	Spawned->SetActorRelativeLocation(SpawnPoint);
+	Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+}
+
+
+
+
 // Sets default values
 ACTile::ACTile()
 {
@@ -18,8 +50,7 @@ void ACTile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CastSphere(GetActorLocation(), 300);
-	CastSphere(GetActorLocation() + FVector(0, 0, 1000), 300);
+	
 	
 }
 
@@ -30,39 +61,34 @@ void ACTile::Tick(float DeltaTime)
 
 }
 
-
-void ACTile::PlaceActors(TSubclassOf<AActor>ToSpawn,int minSpawn, int maxSpawn) {
-
-
-	//TODO Resize scene
-	FVector min(0, -2000, 0);
-	FVector max(4000, 2000, 0);
-	FBox bounds(min, max);
-	
-	int numberToSpawn = FMath::RandRange(minSpawn, maxSpawn);
-	//Generating random number
-	for (size_t i = 0; i < numberToSpawn; i++)
+//If empty location then place actor
+void ACTile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn, float Radius) {
+	int NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
+	for (size_t i = 0; i < NumberToSpawn; i++)
 	{
-		FVector spawnPoint = FMath::RandPointInBox(bounds);
-		AActor *spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
-		spawned->SetActorRelativeLocation(spawnPoint);
-		spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+		FVector SpawnPoint;
+		bool found = FindEmptyLocation(SpawnPoint, Radius);
+		if (found) {
+			PlaceActor(ToSpawn, SpawnPoint);
+		}
 	}
-
 }
 
-bool ACTile::CastSphere(FVector Location, float Radius)
+
+bool ACTile::CanSpawnAtLocation(FVector Location, float Radius)
 {
 	FHitResult HitResult;
+	FVector GlobalLocation = ActorToWorld().TransformPosition(Location);
 	bool HasHit = GetWorld()->SweepSingleByChannel(
 		HitResult,
-		Location,
-		Location,
+		GlobalLocation,
+		GlobalLocation,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(Radius)
 	);
 	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
-	DrawDebugSphere(GetWorld(), Location, Radius, 100, ResultColor, true, 100);
-	return HasHit;
+	
+	DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius, FQuat::Identity, ResultColor, true, 100);
+	return !HasHit;
 }

@@ -14,9 +14,13 @@ class ENGINFEATURESUE4_API ACTile : public AActor
 private :
 	
 	UFUNCTION(BlueprintCallable, Category = "Component")
-		void PlaceActors(TSubclassOf<AActor>ToSpawn, int minSpawn, int maxSpawn);
+		void PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn = 1, int MaxSpawn = 1, float Radius = 500);
 
-	bool CastSphere(FVector Location, float Radius);
+
+
+	bool FindEmptyLocation(FVector& OutLocation, float Radius);
+	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint);
+	bool CanSpawnAtLocation(FVector Location, float Radius);
 	
 public:	
 	// Sets default values for this actor's properties
