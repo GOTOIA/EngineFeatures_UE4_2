@@ -6,6 +6,10 @@
 #include "CoreMinimal.h"
 #include "CTile.generated.h"
 
+
+class UCActorPool;
+
+
 UCLASS()
 class ENGINFEATURESUE4_API ACTile : public AActor
 {
@@ -21,6 +25,8 @@ private :
 	bool FindEmptyLocation(FVector& OutLocation, float Radius);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Rotation, float Scale);
 	bool CanSpawnAtLocation(FVector Location, float Radius);
+
+	UCActorPool* Pool;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -35,5 +41,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Pool")
+		void SetPool(UCActorPool* inPool);
 
 };

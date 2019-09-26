@@ -4,6 +4,8 @@
 #include "CTile.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Actor.h"
+#include "CActorPool.h"
+
 
 
 //Sub find a good location (empty)
@@ -62,6 +64,13 @@ void ACTile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACTile::SetPool(UCActorPool * inPool)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("[%s] Setting Pool %s"), *(this->GetName()), *(inPool->GetName()));
+	Pool = inPool;
 }
 
 //If empty location then place actor Blueprintable

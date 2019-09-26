@@ -4,6 +4,13 @@
 #include "CFP_ShooterGameMode.h"
 #include "Navmesh/NavMeshBoundsVolume.h"
 #include "EngineUtils.h"
+#include "CActorPool.h"
+
+
+ACFP_ShooterGameMode::ACFP_ShooterGameMode() {
+
+	NavMeshBoundsVolumePool = CreateDefaultSubobject<UCActorPool>(FName("Nav Mesh Bounds Volume Pool"));
+}
 
 void ACFP_ShooterGameMode::PopulateBoundsVolumePool() {
 

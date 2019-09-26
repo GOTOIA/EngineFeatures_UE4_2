@@ -15,9 +15,17 @@ class ENGINFEATURESUE4_API ACFP_ShooterGameMode : public AFP_FirstPersonGameMode
 	GENERATED_BODY()
 
 	public:
+
+		ACFP_ShooterGameMode();
+
 		UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
 		void PopulateBoundsVolumePool();
 	
+	protected:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pool")
+		class UCActorPool* NavMeshBoundsVolumePool;
+
 	private:
 
 	void AddToPool(class ANavMeshBoundsVolume *VolumeToAdd);
